@@ -12,7 +12,6 @@ export default function useRank() {
     (async () => {
       const data = await db.getList();
       if (data) {
-        console.log(data);
         setOriginRanks(data);
       }
       setInital(true);

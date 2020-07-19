@@ -58,8 +58,6 @@ export default function Rank(): JSX.Element {
     }
   }, [gameState]);
 
-  console.log(ranks);
-
   useEffect(() => {
     Modal.setAppElement('#root');
   }, [ranks]);
