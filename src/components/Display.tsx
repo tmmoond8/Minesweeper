@@ -3,15 +3,21 @@ import { jsx } from '@emotion/core';
 import styled from '@emotion/styled';
 import { useCallback } from 'react';
 import useMineCounter from '../hooks/useMineCounter';
+import useGameBoard from '../hooks/useGameBoard';
 
 export default function Display(): JSX.Element {
   const mineCounter = useMineCounter();
+  const gameBoard = useGameBoard();
+  const handleReset = useCallback(() => {
+    mineCounter.onReset();
+    gameBoard.onReset();
+  }, [mineCounter, gameBoard]);
   const elapsedTime = 14;
 
   return (
     <Panel>
       <Counter>{mineCounter.count}</Counter>
-      <ResetButton>😀</ResetButton>
+      <ResetButton onClick={handleReset}>😀</ResetButton>
       <Timer>{elapsedTime}</Timer>
     </Panel>
   );

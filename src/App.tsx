@@ -1,14 +1,21 @@
 import React from 'react';
+import styled from '@emotion/styled';
 import Display from './components/Display';
-import Square from './components/Square';
+import GameBoard from './components/GameBoard';
 
 function App() {
   return (
-    <div className="App">
+    <Layout className="App">
       <Display />
-      <Square />
-    </div>
+      <GameBoard />
+    </Layout>
   );
 }
 
 export default App;
+
+const Layout = styled.div`
+  width: 100%;
+  max-width: 320px;
+  margin: auto;
+`;

@@ -1,20 +1,29 @@
 import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { increase, decrease, reset } from '../modules/mineCounter';
-import { RootState } from '../modules';
+import { addFlag, removeFlag, reset } from '../stores/mineCounter';
+import { Position } from '../types';
+import { RootState } from '../stores';
 
-export default function useCounter() {
+export default function useMineCounter() {
   const count = useSelector((state: RootState) => state.mineCounter.count);
+  const flags = useSelector((state: RootState) => state.mineCounter.flags);
   const dispatch = useDispatch();
 
-  const onIncrease = useCallback(() => dispatch(increase()), [dispatch]);
-  const onDecrease = useCallback(() => dispatch(decrease()), [dispatch]);
+  const onAddFlag = useCallback(
+    (position: Position) => dispatch(addFlag(position)),
+    [dispatch],
+  );
+  const onRemoveFlag = useCallback(
+    (position: Position) => dispatch(removeFlag(position)),
+    [dispatch],
+  );
   const onReset = useCallback(() => dispatch(reset()), [dispatch]);
 
   return {
     count,
-    onIncrease,
-    onDecrease,
+    flags,
+    onAddFlag,
+    onRemoveFlag,
     onReset,
   };
 }
