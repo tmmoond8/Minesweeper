@@ -8,3 +8,5 @@ export interface Square extends Position {
   isFlag: boolean;
   displayValue?: string;
 }
+
+export type GameState = 'READY' | 'PLAYING' | 'OVER' | 'CLEAR';

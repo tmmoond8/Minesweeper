@@ -1,49 +1,45 @@
-import { Position, Square } from '../types';
+import { Position, Square, GameState } from '../types';
 import * as gameManager from '../modules/gameManager';
 
 const OPEN_SQAURE = 'gameBoard/OPEN_SQAURE' as const;
 const RESET = 'gameBoard/RESET' as const;
+const ADD_FLAG = 'gameBoard/ADD_FLAG' as const;
+const REMOVE_FLAG = 'gameBoard/REMOVE_FLAG' as const;
 
 export const openSquare = (position: Position) => ({
   type: OPEN_SQAURE,
   payload: position,
 });
 
+export const addFlag = (position: Position) => ({
+  type: ADD_FLAG,
+  payload: position,
+});
+export const removeFlag = (position: Position) => ({
+  type: REMOVE_FLAG,
+  payload: position,
+});
+
 export const reset = () => ({ type: RESET });
 
-type GameBoardAction = ReturnType<typeof openSquare> | ReturnType<typeof reset>;
+type GameBoardAction =
+  | ReturnType<typeof openSquare>
+  | ReturnType<typeof addFlag>
+  | ReturnType<typeof removeFlag>
+  | ReturnType<typeof reset>;
 
 interface GameBoardState {
   squares: Square[][];
+  flags: Position[];
   mines: Position[];
+  gameState: GameState;
 }
 
 const initalState: GameBoardState = {
-  squares: new Array(8)
-    .fill(null)
-    .map((_, y) =>
-      new Array(8)
-        .fill(null)
-        .map((_, x) => ({ isOpen: false, isFlag: false, x, y })),
-    ),
-  mines: [
-    { x: 4, y: 1 },
-    { x: 1, y: 8 },
-    { x: 3, y: 9 },
-    { x: 4, y: 4 },
-    { x: 5, y: 2 },
-    { x: 6, y: 3 },
-    { x: 2, y: 3 },
-    { x: 1, y: 4 },
-    { x: 9, y: 3 },
-    { x: 2, y: 1 },
-  ],
-  // new Array(8 * 8)
-  //   .fill(null)
-  //   .map((_, index) => index)
-  //   .sort(() => Math.random() - 0.5)
-  //   .filter((_, index) => index < 10)
-  //   .map((num) => ({ x: num % 10, y: Math.floor(num / 10) })),
+  gameState: 'READY',
+  flags: [],
+  squares: gameManager.initSquares,
+  mines: gameManager.initMines,
 };
 
 function GameBoard(
@@ -52,14 +48,46 @@ function GameBoard(
 ): GameBoardState {
   switch (action.type) {
     case OPEN_SQAURE:
+      if (gameManager.isGameEnd(state.gameState)) {
+        return state;
+      }
+      const { squares, gameState } = gameManager.openSquare(
+        state.squares,
+        state.mines,
+        action.payload,
+      );
       return {
-        squares: gameManager.openSquare(
-          state.squares,
-          state.mines,
-          action.payload,
-        ),
-        mines: state.mines,
+        ...state,
+        squares,
+        gameState,
+        flags: gameState === 'CLEAR' ? state.mines : state.flags,
       };
+    case ADD_FLAG: {
+      if (gameManager.isGameEnd(state.gameState)) {
+        return state;
+      }
+      const nextFlags = [...state.flags, action.payload];
+      const isClear = gameManager.checkGameClear(
+        state.squares,
+        state.mines,
+        nextFlags,
+      );
+      return {
+        ...state,
+        flags: nextFlags,
+        gameState: isClear ? 'CLEAR' : state.gameState,
+      };
+    }
+    case REMOVE_FLAG: {
+      if (gameManager.isGameEnd(state.gameState)) {
+        return state;
+      }
+      const { x, y } = action.payload;
+      const nextFlags = state.flags.filter(
+        (flag: Position) => flag.x !== x || flag.y !== y,
+      );
+      return { ...state, flags: nextFlags };
+    }
     case RESET:
       return initalState;
     default:

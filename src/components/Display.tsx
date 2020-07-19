@@ -12,13 +12,12 @@ export default function Display(): JSX.Element {
     mineCounter.onReset();
     gameBoard.onReset();
   }, [mineCounter, gameBoard]);
-  const elapsedTime = 14;
 
   return (
     <Panel>
-      <Counter>{mineCounter.count}</Counter>
+      <Counter>💣 {String(mineCounter.count).padStart(3, '0')}</Counter>
       <ResetButton onClick={handleReset}>😀</ResetButton>
-      <Timer>{elapsedTime}</Timer>
+      <Timer>⌛{String(gameBoard.elapsedTime).padStart(3, '0')}</Timer>
     </Panel>
   );
 }

@@ -12,10 +12,9 @@ export default function useSquare(position: Position) {
     return squares[position.y][position.x];
   }, [squares, position]);
 
-  const onOpenSquare = useCallback(() => dispatch(openSquare(position)), [
-    dispatch,
-    position,
-  ]);
+  const onOpenSquare = useCallback(() => {
+    dispatch(openSquare(position));
+  }, [dispatch, position]);
 
   return {
     square,
