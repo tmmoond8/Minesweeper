@@ -6,7 +6,7 @@ import Square from './Square';
 import { Square as SquareType } from '../types';
 
 export default function GameBoard(): JSX.Element {
-  const { squares } = useGameBoard();
+  const { squares, mines } = useGameBoard();
   return (
     <Board>
       {squares.map((rows: SquareType[]) => (

@@ -6,6 +6,7 @@ import { Position } from '../types';
 
 export default function useGameBoard() {
   const squares = useSelector((state: RootState) => state.gameBoard.squares);
+  const mines = useSelector((state: RootState) => state.gameBoard.mines);
   const dispatch = useDispatch();
 
   const onOpenSquare = useCallback(
@@ -17,6 +18,7 @@ export default function useGameBoard() {
 
   return {
     squares,
+    mines,
     onOpenSquare,
     onReset,
   };

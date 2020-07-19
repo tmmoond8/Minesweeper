@@ -2,28 +2,36 @@
 import { jsx } from '@emotion/core';
 import styled from '@emotion/styled';
 import { Position } from '../types';
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useEffect, MouseEvent } from 'react';
 import useMineCounter from '../hooks/useMineCounter';
+import useSquare from '../hooks/useSquare';
 
 interface SquareProps extends Position {}
 
 export default function Square(props: SquareProps): JSX.Element {
   const { x, y } = props;
   const mineCounter = useMineCounter();
-  const isOpen = false;
+  const { square, onOpenSquare } = useSquare({ x, y });
   const isFlag = useMemo(() => {
     return mineCounter.flags.find((flag) => flag.x === x && flag.y === y);
   }, [mineCounter, x, y]);
-  const handleRightClick = useCallback(() => {
-    if (!isFlag) {
-      mineCounter.onAddFlag({ x, y });
-    } else {
-      mineCounter.onRemoveFlag({ x, y });
-    }
-  }, [isFlag, mineCounter, x, y]);
+  const handleRightClick = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (!isFlag) {
+        mineCounter.onAddFlag({ x, y });
+      } else {
+        mineCounter.onRemoveFlag({ x, y });
+      }
+    },
+    [isFlag, mineCounter, x, y],
+  );
 
   return (
-    <StyledSquare onClick={handleRightClick}>{isFlag && '🏳️‍🌈'}</StyledSquare>
+    <StyledSquare onClick={onOpenSquare} onContextMenu={handleRightClick}>
+      {isFlag && '🏳️‍🌈'}
+      {!isFlag && square.isOpen && square.displayValue}
+    </StyledSquare>
   );
 }
 
