@@ -10,3 +10,8 @@ export interface Square extends Position {
 }
 
 export type GameState = 'READY' | 'PLAYING' | 'OVER' | 'CLEAR';
+
+export interface Rank {
+  nickname: string;
+  score: number;
+}

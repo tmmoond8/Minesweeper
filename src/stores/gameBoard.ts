@@ -35,15 +35,15 @@ interface GameBoardState {
   gameState: GameState;
 }
 
-const initalState: GameBoardState = {
+const initalState = (): GameBoardState => ({
   gameState: 'READY',
   flags: [],
   squares: gameManager.initSquares,
-  mines: gameManager.initMines,
-};
+  mines: gameManager.initMines(),
+});
 
 function GameBoard(
-  state: GameBoardState = initalState,
+  state: GameBoardState = initalState(),
   action: GameBoardAction,
 ): GameBoardState {
   switch (action.type) {
@@ -89,7 +89,7 @@ function GameBoard(
       return { ...state, flags: nextFlags };
     }
     case RESET:
-      return initalState;
+      return initalState();
     default:
       return state;
   }

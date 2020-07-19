@@ -44,9 +44,12 @@ const ResetButton = styled.button`
 `;
 
 const Counter = styled.p`
+  width: 80px;
   font-size: 24px;
 `;
 
 const Timer = styled.p`
+  text-align: right;
+  width: 80px;
   font-size: 24px;
 `;

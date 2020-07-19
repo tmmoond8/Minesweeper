@@ -1,6 +1,6 @@
 import { Position, Square, GameState } from '../types';
 
-const detectBomb = (mines: Position[], position: Position) => {
+const detectMine = (mines: Position[], position: Position) => {
   const { x, y } = position;
   const surroundings = [
     { x: x - 1, y: y - 1 },
@@ -66,7 +66,7 @@ export const openSquare = (
     target.displayValue = '💣';
     gameState = 'OVER';
   } else {
-    target.displayValue = String(detectBomb(mines, position));
+    target.displayValue = String(detectMine(mines, position));
   }
 
   const resultSquares = [
@@ -93,12 +93,13 @@ export const initSquares = new Array(8)
       .map((_, x) => ({ isOpen: false, isFlag: false, x, y })),
   );
 
-export const initMines = new Array(8 * 8)
-  .fill(null)
-  .map((_, index) => index)
-  .sort(() => Math.random() - 0.5)
-  .filter((_, index) => index < 10)
-  .map((num) => ({ x: num % 10, y: Math.floor(num / 10) }));
+export const initMines = () =>
+  new Array(8 * 8)
+    .fill(null)
+    .map((_, index) => index)
+    .sort(() => Math.random() - 0.5)
+    .filter((_, index) => index < 10)
+    .map((num) => ({ x: num % 10, y: Math.floor(num / 10) }));
 
 export const isGameEnd = (gameState: GameState) =>
   ['CLEAR', 'OVER'].includes(gameState);
