@@ -105,21 +105,6 @@ const Item = styled.li`
   border-bottom: 1px solid #bbb;
 `;
 
-const ModalButton = styled.button`
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  background: none;
-  font-size: 20px;
-  outline: none;
-  &:active {
-    transform: scale(1.4);
-  }
-  transition: all 0.5s;
-`;
-
 const ModalHead = styled.div`
   display: flex;
   justify-content: space-between;
