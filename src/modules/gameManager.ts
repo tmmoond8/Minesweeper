@@ -1,5 +1,7 @@
 import { Position, Square, GameState } from '../types';
 
+const GAME_SIZE = 8;
+
 const detectMine = (mines: Position[], position: Position) => {
   const { x, y } = position;
   const surroundings = [
@@ -11,7 +13,7 @@ const detectMine = (mines: Position[], position: Position) => {
     { x: x - 1, y: y + 1 },
     { x: x + 0, y: y + 1 },
     { x: x + 1, y: y + 1 },
-  ].filter(({ x, y }) => x >= 0 && x < 8 && y >= 0 && y < 8);
+  ].filter(({ x, y }) => x >= 0 && x < GAME_SIZE && y >= 0 && y < GAME_SIZE);
   return surroundings.reduce((accum, surrounding) => {
     return (
       accum +
@@ -63,6 +65,13 @@ export const openSquare = (
 
   const found = mines.find((mine) => mine.x === x && mine.y === y);
   if (found) {
+    mines.forEach(({ x, y }) => {
+      squares[y][x] = {
+        ...squares[y][x],
+        displayValue: '💣',
+        isOpen: true,
+      };
+    });
     target.displayValue = '💣';
     gameState = 'OVER';
   } else {
@@ -85,21 +94,22 @@ export const openSquare = (
   };
 };
 
-export const initSquares = new Array(8)
-  .fill(null)
-  .map((_, y) =>
-    new Array(8)
-      .fill(null)
-      .map((_, x) => ({ isOpen: false, isFlag: false, x, y })),
-  );
+export const initSquares = () =>
+  new Array(GAME_SIZE)
+    .fill(null)
+    .map((_, y) =>
+      new Array(GAME_SIZE)
+        .fill(null)
+        .map((_, x) => ({ isOpen: false, isFlag: false, x, y })),
+    );
 
 export const initMines = () =>
-  new Array(8 * 8)
+  new Array(GAME_SIZE * GAME_SIZE)
     .fill(null)
     .map((_, index) => index)
     .sort(() => Math.random() - 0.5)
-    .filter((_, index) => index < 10)
-    .map((num) => ({ x: num % 10, y: Math.floor(num / 10) }));
+    .filter((_, index) => index < GAME_SIZE)
+    .map((num) => ({ x: num % GAME_SIZE, y: Math.floor(num / GAME_SIZE) }));
 
 export const isGameEnd = (gameState: GameState) =>
   ['CLEAR', 'OVER'].includes(gameState);

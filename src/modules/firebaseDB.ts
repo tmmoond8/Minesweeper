@@ -28,10 +28,7 @@ class Firebase {
     return data;
   }
   async addScore(nickname: string, score: number): Promise<void> {
-    const randdomKey = (Math.random() * 7233232131).toString(32).substr(0, 6);
-    await this.firebase.ref('/rank').update({
-      [randdomKey]: { nickname, score },
-    });
+    await this.firebase.ref('/rank').push({ nickname, score });
   }
 }
 export default new Firebase();

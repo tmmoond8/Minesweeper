@@ -38,7 +38,7 @@ interface GameBoardState {
 const initalState = (): GameBoardState => ({
   gameState: 'READY',
   flags: [],
-  squares: gameManager.initSquares,
+  squares: gameManager.initSquares(),
   mines: gameManager.initMines(),
 });
 
@@ -63,7 +63,10 @@ function GameBoard(
         flags: gameState === 'CLEAR' ? state.mines : state.flags,
       };
     case ADD_FLAG: {
-      if (gameManager.isGameEnd(state.gameState)) {
+      if (
+        gameManager.isGameEnd(state.gameState) ||
+        state.mines.length <= state.flags.length
+      ) {
         return state;
       }
       const nextFlags = [...state.flags, action.payload];

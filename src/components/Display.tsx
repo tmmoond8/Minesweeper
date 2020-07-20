@@ -9,9 +9,8 @@ export default function Display(): JSX.Element {
   const mineCounter = useMineCounter();
   const gameBoard = useGameBoard();
   const handleReset = useCallback(() => {
-    mineCounter.onReset();
     gameBoard.onReset();
-  }, [mineCounter, gameBoard]);
+  }, [gameBoard]);
 
   return (
     <Panel>
