@@ -8,9 +8,10 @@ Frontend
 
 - React
 - Emotion
+- Refux
 - TypeScript
 - Firebase Database
 
-````
+```
 $ cd yarn && yarn start
 ```
