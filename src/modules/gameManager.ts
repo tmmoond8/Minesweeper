@@ -1,4 +1,5 @@
 import { Position, Square, GameState } from '../types';
+import * as CONST from '../constants';
 
 const GAME_SIZE = 8;
 
@@ -56,7 +57,7 @@ export const openSquare = (
 ): { squares: Square[][]; gameState: GameState } => {
   const { x, y } = position;
   const target = { ...squares[y][x] };
-  let gameState: GameState = 'PLAYING';
+  let gameState: GameState = CONST.GameState.PLAYING;
 
   if (target.isOpen) {
     return { squares, gameState };
@@ -73,7 +74,7 @@ export const openSquare = (
       };
     });
     target.displayValue = '💣';
-    gameState = 'OVER';
+    gameState = CONST.GameState.OVER;
   } else {
     target.displayValue = String(detectMine(mines, position));
   }
@@ -86,7 +87,7 @@ export const openSquare = (
 
   const isClear = checkGameClear(resultSquares, mines);
   if (isClear) {
-    gameState = 'CLEAR';
+    gameState = CONST.GameState.CLEAR;
   }
   return {
     squares: resultSquares,
@@ -112,4 +113,4 @@ export const initMines = () =>
     .map((num) => ({ x: num % GAME_SIZE, y: Math.floor(num / GAME_SIZE) }));
 
 export const isGameEnd = (gameState: GameState) =>
-  ['CLEAR', 'OVER'].includes(gameState);
+  [CONST.GameState.CLEAR, CONST.GameState.OVER].includes(gameState);

@@ -6,6 +6,7 @@ import useRank from '../hooks/useRank';
 import Modal from 'react-modal';
 import { Rank as RankType } from '../types';
 import useGameBoard from '../hooks/useGameBoard';
+import * as CONST from '../constants';
 
 const customStyles = {
   content: {
@@ -53,7 +54,7 @@ export default function Rank(): JSX.Element {
   };
 
   useEffect(() => {
-    if (gameState === 'CLEAR') {
+    if (gameState === CONST.GameState.CLEAR) {
       setIsOpen(true);
     }
   }, [gameState]);

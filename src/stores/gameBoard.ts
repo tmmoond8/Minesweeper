@@ -1,5 +1,6 @@
 import { Position, Square, GameState } from '../types';
 import * as gameManager from '../modules/gameManager';
+import * as CONST from '../constants';
 
 const OPEN_SQAURE = 'gameBoard/OPEN_SQAURE' as const;
 const RESET = 'gameBoard/RESET' as const;
@@ -36,7 +37,7 @@ interface GameBoardState {
 }
 
 const initalState = (): GameBoardState => ({
-  gameState: 'READY',
+  gameState: CONST.GameState.READY,
   flags: [],
   squares: gameManager.initSquares(),
   mines: gameManager.initMines(),
@@ -60,7 +61,7 @@ function GameBoard(
         ...state,
         squares,
         gameState,
-        flags: gameState === 'CLEAR' ? state.mines : state.flags,
+        flags: gameState === CONST.GameState.CLEAR ? state.mines : state.flags,
       };
     case ADD_FLAG: {
       if (
@@ -78,7 +79,7 @@ function GameBoard(
       return {
         ...state,
         flags: nextFlags,
-        gameState: isClear ? 'CLEAR' : state.gameState,
+        gameState: isClear ? CONST.GameState.CLEAR : state.gameState,
       };
     }
     case REMOVE_FLAG: {

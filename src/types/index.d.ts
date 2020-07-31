@@ -1,3 +1,5 @@
+import GameStateEnum from '../constants';
+
 export interface Position {
   x: number;
   y: number;
@@ -9,7 +11,7 @@ export interface Square extends Position {
   displayValue?: string;
 }
 
-export type GameState = 'READY' | 'PLAYING' | 'OVER' | 'CLEAR';
+export type GameState = typeof GameStateEnum[keyof typeof GameStateEnum];
 
 export interface Rank {
   nickname: string;

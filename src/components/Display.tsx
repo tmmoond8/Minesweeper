@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import useMineCounter from '../hooks/useMineCounter';
 import useGameBoard from '../hooks/useGameBoard';
 import Modal from 'react-modal';
+import * as CONST from '../constants';
 
 const customStyles = {
   content: {
@@ -31,7 +32,7 @@ export default function Display(): JSX.Element {
   }
 
   useEffect(() => {
-    if (gameBoard.gameState === 'OVER') {
+    if (gameBoard.gameState === CONST.GameState.OVER) {
       setIsOpen(true);
     }
   }, [gameBoard.gameState]);
