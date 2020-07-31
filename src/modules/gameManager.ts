@@ -1,4 +1,5 @@
 import { Position, Square, GameState } from '../types';
+import cloneDeep from 'lodash.clonedeep';
 import * as CONST from '../constants';
 
 const GAME_SIZE = 8;
@@ -51,7 +52,8 @@ export const openSquare = (
   position: Position,
 ): { squares: Square[][]; gameState: GameState } => {
   const { x, y } = position;
-  const target = { ...squares[y][x] };
+  const nextSquares = cloneDeep(squares);
+  const target = nextSquares[y][x];
   let gameState: GameState = CONST.GameState.PLAYING;
 
   if (target.isOpen) {
@@ -62,8 +64,8 @@ export const openSquare = (
   const found = mines.find((mine) => mine.x === x && mine.y === y);
   if (found) {
     mines.forEach(({ x, y }) => {
-      squares[y][x] = {
-        ...squares[y][x],
+      nextSquares[y][x] = {
+        ...nextSquares[y][x],
         displayValue: '💣',
         isOpen: true,
       };
@@ -74,18 +76,12 @@ export const openSquare = (
     target.displayValue = String(detectMine(mines, position));
   }
 
-  const resultSquares = [
-    ...squares.slice(0, y),
-    [...squares[y].slice(0, x), target, ...squares[y].slice(x + 1)],
-    ...squares.slice(y + 1),
-  ];
-
-  const isClear = checkGameClear(resultSquares, mines);
+  const isClear = checkGameClear(nextSquares, mines);
   if (isClear) {
     gameState = CONST.GameState.CLEAR;
   }
   return {
-    squares: resultSquares,
+    squares: nextSquares,
     gameState,
   };
 };
