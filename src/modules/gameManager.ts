@@ -32,17 +32,12 @@ export const checkGameClear = (
 ) => {
   if (flags) {
     const sortFunction = (a: Position, b: Position) => {
-      if (a.y > b.y) {
-        return a.x - b.x;
-      }
-      return -1;
+      return a.x - b.x;
     };
-    flags.sort(sortFunction);
-    mines.sort(sortFunction);
-    const isSame = JSON.stringify(flags) === JSON.stringify(mines);
-    if (isSame) {
-      return true;
-    }
+    return (
+      JSON.stringify([...flags].sort(sortFunction)) ===
+      JSON.stringify([...mines].sort(sortFunction))
+    );
   }
 
   return (

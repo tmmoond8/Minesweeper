@@ -3,10 +3,10 @@ import db from '../modules/firebaseDB';
 import { Rank } from '../types';
 
 export default function useRank() {
-  const [inital, setInital] = useState(false);
+  const [init, setInit] = useState(false);
   const [originRanks, setOriginRanks] = useState<Rank[]>([]);
   useEffect(() => {
-    if (inital) {
+    if (init) {
       return;
     }
     (async () => {
@@ -14,13 +14,12 @@ export default function useRank() {
       if (data) {
         setOriginRanks(data);
       }
-      setInital(true);
+      setInit(true);
     })();
-  }, [inital]);
+  }, [init]);
 
   const ranks = useMemo(() => {
-    originRanks.sort((a, b) => a.score - b.score);
-    return originRanks.slice(0, 10);
+    return [...originRanks].sort((a, b) => a.score - b.score).slice(0, 10);
   }, [originRanks]);
 
   const addRank = useCallback(
