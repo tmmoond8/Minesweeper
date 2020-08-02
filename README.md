@@ -8,7 +8,7 @@ Frontend
 
 - React
 - Emotion
-- Refux
+- Redux
 - TypeScript
 - Firebase Database
 
