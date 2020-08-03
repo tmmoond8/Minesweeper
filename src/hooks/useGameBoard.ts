@@ -1,8 +1,7 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { openSquare, reset } from '../stores/gameBoard';
+import { reset } from '../stores/gameBoard';
 import { RootState } from '../stores';
-import { Position } from '../types';
 import * as CONST from '../constants';
 
 export default function useGameBoard() {
@@ -12,11 +11,6 @@ export default function useGameBoard() {
     (state: RootState) => state.gameBoard.gameState,
   );
   const dispatch = useDispatch();
-
-  const onOpenSquare = useCallback(
-    (position: Position) => dispatch(openSquare(position)),
-    [dispatch],
-  );
 
   const [elapsedTime, setElapsedTime] = useState(0);
   useEffect(() => {
@@ -40,7 +34,6 @@ export default function useGameBoard() {
     mines,
     gameState,
     elapsedTime,
-    onOpenSquare,
     onReset,
   };
 }

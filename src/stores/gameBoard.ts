@@ -6,6 +6,7 @@ const OPEN_SQAURE = 'gameBoard/OPEN_SQAURE' as const;
 const RESET = 'gameBoard/RESET' as const;
 const ADD_FLAG = 'gameBoard/ADD_FLAG' as const;
 const REMOVE_FLAG = 'gameBoard/REMOVE_FLAG' as const;
+const PLANT_MINE = 'gameBoard/PLANT_MINE' as const;
 
 export const openSquare = (position: Position) => ({
   type: OPEN_SQAURE,
@@ -21,12 +22,18 @@ export const removeFlag = (position: Position) => ({
   payload: position,
 });
 
+export const plantMine = (mines: Position[]) => ({
+  type: PLANT_MINE,
+  payload: mines,
+});
+
 export const reset = () => ({ type: RESET });
 
 type GameBoardAction =
   | ReturnType<typeof openSquare>
   | ReturnType<typeof addFlag>
   | ReturnType<typeof removeFlag>
+  | ReturnType<typeof plantMine>
   | ReturnType<typeof reset>;
 
 interface GameBoardState {
@@ -36,15 +43,15 @@ interface GameBoardState {
   gameState: GameState;
 }
 
-const initalState = (): GameBoardState => ({
-  gameState: CONST.GameState.READY,
+const initalState: GameBoardState = {
+  squares: gameManager.initSquares,
   flags: [],
-  squares: gameManager.initSquares(),
-  mines: gameManager.initMines(),
-});
+  mines: [],
+  gameState: CONST.GameState.READY,
+};
 
 function GameBoard(
-  state: GameBoardState = initalState(),
+  state: GameBoardState = initalState,
   action: GameBoardAction,
 ): GameBoardState {
   switch (action.type) {
@@ -92,8 +99,14 @@ function GameBoard(
       );
       return { ...state, flags: nextFlags };
     }
+    case PLANT_MINE: {
+      return {
+        ...state,
+        mines: action.payload,
+      };
+    }
     case RESET:
-      return initalState();
+      return initalState;
     default:
       return state;
   }

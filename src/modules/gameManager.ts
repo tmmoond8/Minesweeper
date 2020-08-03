@@ -86,14 +86,13 @@ export const openSquare = (
   };
 };
 
-export const initSquares = () =>
-  new Array(GAME_SIZE)
-    .fill(null)
-    .map((_, y) =>
-      new Array(GAME_SIZE)
-        .fill(null)
-        .map((_, x) => ({ isOpen: false, isFlag: false, x, y })),
-    );
+export const initSquares = new Array(GAME_SIZE)
+  .fill(null)
+  .map((_, y) =>
+    new Array(GAME_SIZE)
+      .fill(null)
+      .map((_, x) => ({ isOpen: false, isFlag: false, x, y })),
+  );
 
 export const initMines = () =>
   new Array(GAME_SIZE * GAME_SIZE)
