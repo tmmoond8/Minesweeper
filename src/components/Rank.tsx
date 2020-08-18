@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 import { Rank as RankType } from '../types';
 import useGameBoard from '../hooks/useGameBoard';
 import GameClearModal from './GameClearModal';
-import * as CONST from '../constants';
+import * as ENUM from '../types/enum';
 
 interface RankProps extends RankType {
   index: number;
@@ -34,7 +34,7 @@ export default function Rank(): JSX.Element {
   }, [setIsOpen]);
 
   useEffect(() => {
-    if (gameState === CONST.GameState.CLEAR) {
+    if (gameState === ENUM.GameState.CLEAR) {
       setIsOpen(true);
     }
   }, [gameState]);

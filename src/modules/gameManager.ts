@@ -1,6 +1,6 @@
 import { Position, Square, GameState } from '../types';
 import cloneDeep from 'lodash.clonedeep';
-import * as CONST from '../constants';
+import * as ENUM from '../types/enum';
 
 const GAME_SIZE = 8;
 
@@ -54,7 +54,7 @@ export const openSquare = (
   const { x, y } = position;
   const nextSquares = cloneDeep(squares);
   const target = nextSquares[y][x];
-  let gameState: GameState = CONST.GameState.PLAYING;
+  let gameState: GameState = ENUM.GameState.PLAYING;
 
   if (target.isOpen) {
     return { squares, gameState };
@@ -71,14 +71,14 @@ export const openSquare = (
       };
     });
     target.displayValue = '💣';
-    gameState = CONST.GameState.OVER;
+    gameState = ENUM.GameState.OVER;
   } else {
     target.displayValue = String(detectMine(mines, position));
   }
 
   const isClear = checkGameClear(nextSquares, mines);
   if (isClear) {
-    gameState = CONST.GameState.CLEAR;
+    gameState = ENUM.GameState.CLEAR;
   }
   return {
     squares: nextSquares,
@@ -103,4 +103,4 @@ export const initMines = () =>
     .map((num) => ({ x: num % GAME_SIZE, y: Math.floor(num / GAME_SIZE) }));
 
 export const isGameEnd = (gameState: GameState) =>
-  [CONST.GameState.CLEAR, CONST.GameState.OVER].includes(gameState);
+  [ENUM.GameState.CLEAR, ENUM.GameState.OVER].includes(gameState);

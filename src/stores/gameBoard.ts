@@ -1,6 +1,6 @@
 import { Position, Square, GameState } from '../types';
 import * as gameManager from '../modules/gameManager';
-import * as CONST from '../constants';
+import * as ENUM from '../types/enum';
 
 const OPEN_SQAURE = 'gameBoard/OPEN_SQAURE' as const;
 const RESET = 'gameBoard/RESET' as const;
@@ -47,7 +47,7 @@ const initalState: GameBoardState = {
   squares: gameManager.initSquares,
   flags: [],
   mines: [],
-  gameState: CONST.GameState.READY,
+  gameState: ENUM.GameState.READY,
 };
 
 function GameBoard(
@@ -68,7 +68,7 @@ function GameBoard(
         ...state,
         squares,
         gameState,
-        flags: gameState === CONST.GameState.CLEAR ? state.mines : state.flags,
+        flags: gameState === ENUM.GameState.CLEAR ? state.mines : state.flags,
       };
     case ADD_FLAG: {
       if (
@@ -86,7 +86,7 @@ function GameBoard(
       return {
         ...state,
         flags: nextFlags,
-        gameState: isClear ? CONST.GameState.CLEAR : state.gameState,
+        gameState: isClear ? ENUM.GameState.CLEAR : state.gameState,
       };
     }
     case REMOVE_FLAG: {

@@ -4,7 +4,7 @@ import { openSquare, plantMine } from '../stores/gameBoard';
 import * as gameManager from '../modules/gameManager';
 import { RootState } from '../stores';
 import { Position } from '../types';
-import { GameState } from '../constants';
+import * as ENUM from '../types/enum';
 
 export default function useSquare(position: Position) {
   const squares = useSelector((state: RootState) => state.gameBoard.squares);
@@ -18,7 +18,7 @@ export default function useSquare(position: Position) {
   }, [squares, position]);
 
   const onOpenSquare = useCallback(() => {
-    if (gameState === GameState.READY) {
+    if (gameState === ENUM.GameState.READY) {
       dispatch(plantMine(gameManager.initMines()));
     }
     dispatch(openSquare(position));

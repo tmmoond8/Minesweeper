@@ -1,4 +1,4 @@
-import GameStateEnum from '../constants';
+import { GameState as GameStateEnum } from './enum';
 
 export interface Position {
   x: number;

@@ -6,7 +6,7 @@ import useMineCounter from '../hooks/useMineCounter';
 import useGameBoard from '../hooks/useGameBoard';
 import GameOverModal from './GameOverModal';
 
-import * as CONST from '../constants';
+import * as ENUM from '../types/enum';
 
 export default function Display(): JSX.Element {
   const mineCounter = useMineCounter();
@@ -20,7 +20,7 @@ export default function Display(): JSX.Element {
   }, [setIsOpen]);
 
   useEffect(() => {
-    if (gameBoard.gameState === CONST.GameState.OVER) {
+    if (gameBoard.gameState === ENUM.GameState.OVER) {
       setIsOpen(true);
     }
   }, [gameBoard.gameState]);

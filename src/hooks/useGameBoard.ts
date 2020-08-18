@@ -2,7 +2,7 @@ import { useCallback, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { reset } from '../stores/gameBoard';
 import { RootState } from '../stores';
-import * as CONST from '../constants';
+import * as ENUM from '../types/enum';
 
 export default function useGameBoard() {
   const squares = useSelector((state: RootState) => state.gameBoard.squares);
@@ -14,10 +14,10 @@ export default function useGameBoard() {
 
   const [elapsedTime, setElapsedTime] = useState(0);
   useEffect(() => {
-    if (gameState === CONST.GameState.READY) {
+    if (gameState === ENUM.GameState.READY) {
       setElapsedTime(0);
     }
-    if (gameState === CONST.GameState.PLAYING) {
+    if (gameState === ENUM.GameState.PLAYING) {
       const timerId: ReturnType<typeof setTimeout> = setInterval(() => {
         setElapsedTime(elapsedTime + 1);
       }, 1000);
