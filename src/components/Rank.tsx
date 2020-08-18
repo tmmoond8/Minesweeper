@@ -1,23 +1,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import styled from '@emotion/styled';
-import { useState, Fragment, useEffect, ChangeEvent, useCallback } from 'react';
+import { useState, Fragment, useEffect, useCallback } from 'react';
 import useRank from '../hooks/useRank';
 import Modal from 'react-modal';
 import { Rank as RankType } from '../types';
 import useGameBoard from '../hooks/useGameBoard';
+import GameClearModal from './GameClearModal';
 import * as CONST from '../constants';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
 
 interface RankProps extends RankType {
   index: number;
@@ -35,23 +25,13 @@ const RankItem = (props: RankProps) => {
 };
 
 export default function Rank(): JSX.Element {
-  const { ranks, addRank } = useRank();
+  const { ranks } = useRank();
   const [modalIsOpen, setIsOpen] = useState(false);
   const { elapsedTime, gameState } = useGameBoard();
-  const [nickname, setNickname] = useState('');
 
-  function closeModal() {
+  const handleCloseModal = useCallback(() => {
     setIsOpen(false);
-  }
-
-  const handleSend = useCallback(() => {
-    addRank(nickname, elapsedTime);
-    closeModal();
-  }, [addRank, nickname, elapsedTime]);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
-  };
+  }, [setIsOpen]);
 
   useEffect(() => {
     if (gameState === CONST.GameState.CLEAR) {
@@ -70,25 +50,11 @@ export default function Rank(): JSX.Element {
           <RankItem {...rank} index={index} />
         ))}
       </List>
-      <Modal
+      <GameClearModal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <ModalHead>
-          <h2>Clear !!!</h2>
-          <button onClick={closeModal}>close</button>
-        </ModalHead>
-        <ModalBody>
-          <h3>{elapsedTime}</h3>
-          <p>input your nickname</p>
-          <form>
-            <input onChange={handleInputChange} />
-            <button onClick={handleSend}>send</button>
-          </form>
-        </ModalBody>
-      </Modal>
+        elapsedTime={elapsedTime}
+        handleClose={handleCloseModal}
+      />
     </Fragment>
   );
 }
