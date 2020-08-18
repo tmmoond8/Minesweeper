@@ -4,19 +4,9 @@ import styled from '@emotion/styled';
 import { useCallback, useEffect, useState } from 'react';
 import useMineCounter from '../hooks/useMineCounter';
 import useGameBoard from '../hooks/useGameBoard';
-import Modal from 'react-modal';
-import * as CONST from '../constants';
+import GameOverModal from './GameOverModal';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
+import * as CONST from '../constants';
 
 export default function Display(): JSX.Element {
   const mineCounter = useMineCounter();
@@ -24,12 +14,10 @@ export default function Display(): JSX.Element {
   const handleReset = useCallback(() => {
     gameBoard.onReset();
   }, [gameBoard]);
-
   const [modalIsOpen, setIsOpen] = useState(false);
-
-  function closeModal() {
+  const closeModal = useCallback(() => {
     setIsOpen(false);
-  }
+  }, [setIsOpen]);
 
   useEffect(() => {
     if (gameBoard.gameState === CONST.GameState.OVER) {
@@ -37,32 +25,16 @@ export default function Display(): JSX.Element {
     }
   }, [gameBoard.gameState]);
 
-  useEffect(() => {
-    Modal.setAppElement('#root');
-  }, [gameBoard]);
-
   return (
     <Panel>
       <Counter>💣 {String(mineCounter.count).padStart(3, '0')}</Counter>
       <ResetButton onClick={handleReset}>😀</ResetButton>
       <Timer>⌛{String(gameBoard.elapsedTime).padStart(3, '0')}</Timer>
-      <Modal
+      <GameOverModal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <ModalHead>
-          <h2>Game Over !!!</h2>
-        </ModalHead>
-        <ModalBody>
-          <h3>try again ?</h3>
-          <form>
-            <button onClick={closeModal}>close</button>
-            <button onClick={handleReset}>re-try</button>
-          </form>
-        </ModalBody>
-      </Modal>
+        handleClose={closeModal}
+        handleReset={handleReset}
+      />
     </Panel>
   );
 }
@@ -97,29 +69,4 @@ const Timer = styled.p`
   text-align: right;
   width: 80px;
   font-size: 24px;
-`;
-
-const ModalHead = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  & > button {
-    border: none;
-    background: none;
-    outline: none;
-  }
-`;
-
-const ModalBody = styled.div`
-  h3 {
-    margin-top: 0;
-  }
-  form {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    button + button {
-      margin-left: 16px;
-    }
-  }
 `;
