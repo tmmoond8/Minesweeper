@@ -29,12 +29,13 @@ export const plantMine = (mines: Position[]) => ({
 
 export const reset = () => ({ type: RESET });
 
-type GameBoardAction =
-  | ReturnType<typeof openSquare>
-  | ReturnType<typeof addFlag>
-  | ReturnType<typeof removeFlag>
-  | ReturnType<typeof plantMine>
-  | ReturnType<typeof reset>;
+type GameBoardAction = ReturnType<
+  | typeof openSquare
+  | typeof addFlag
+  | typeof removeFlag
+  | typeof plantMine
+  | typeof reset
+>;
 
 interface GameBoardState {
   squares: Square[][];
